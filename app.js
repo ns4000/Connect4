@@ -80,7 +80,7 @@ function alertWin(){
 }
 
 function getAdj(row,col,row_inc,col_inc){
-    if(cellVal(row,col) == cellVal(row+row_inc,col+col_inc)){
+  if(cellVal(row,col) == cellVal(row+row_inc,col+col_inc)){
     return  1+getAdj(row+row_inc,col+col_inc,row_inc,col_inc);
   } else {
     return 0;
@@ -88,34 +88,29 @@ function getAdj(row,col,row_inc,col_inc){
 };
 
 function cellVal(row,col){
-  console.log(row,col);
-
-  if(indexArr[row] == undefined || indexArr[row][col] == undefined){
+    if(indexArr[row] == undefined || indexArr[row][col] == undefined){
     return -1;
   } else {
-    return indexArr[row][col];
+    return indexArr[row][col]["Player"];
   }
-  
-
 };
 
 
 // winCheck should get the column and row and check if a horizantal, verticall or diagonal serise of 4 same value of current player occur then its should be a win
 function winCheck(row,col){
   console.log("row value "+row,'col value '+col);
-
-
-
   if(getAdj(row,col,0,1)+getAdj(row,col,0,-1) > 2){
     alertWin();
   } else {
     if(getAdj(row,col,1,0) > 2){
-      return true;
+      alertWin();
     } else {
       if(getAdj(row,col,-1,1)+getAdj(row,col,1,-1) > 2){
+        alertWin();
         return true;
       } else {
         if(getAdj(row,col,1,1)+getAdj(row,col,-1,-1) > 2){
+          alertWin();
           return true;
         } else {
           return false;
