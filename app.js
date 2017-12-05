@@ -4,6 +4,8 @@ document.getElementById('display').appendChild(app.view);
 
 // a varilable to keep track which player is current set to default player 1 = p1
 let CurrentPlayer = "p1";
+// gameIsRunning is a varilable to check if the game is running or already finished
+let gameIsRunning = 1 ;
 // indexArr is gona work as refrence to match the postion of the coins of which CurrentPlayer and help decied the win condetion
 let indexArr = [[{Player:null},{Player:null},{Player:null},{Player:null},{Player:null},{Player:null},{Player:null}],
                 [{Player:null},{Player:null},{Player:null},{Player:null},{Player:null},{Player:null},{Player:null}],
@@ -49,36 +51,38 @@ function checkIndex(col){
   }else if(indexArr[2][col].Player == null){
            indexArr[2][col].Player = CurrentPlayer;
            winCheck(2,col);
-     // switchPlayer();
+
      return 2;
   }else if(indexArr[3][col].Player == null){
            indexArr[3][col].Player = CurrentPlayer;
            winCheck(3,col);
-     // switchPlayer();
+
      return 3;
   }else if(indexArr[4][col].Player == null){
            indexArr[4][col].Player = CurrentPlayer;
            winCheck(4,col);
-     // switchPlayer();
+
      return 4;
   }else if(indexArr[5][col].Player == null){
            indexArr[5][col].Player = CurrentPlayer;
            winCheck(5,col);
-     // switchPlayer();
+
      return 5;
   }else if(indexArr[6][col].Player == null){
            indexArr[6][col].Player = CurrentPlayer;
            winCheck(6,col);
-     // switchPlayer();
+
      return 6;
   }
 };
 
+// a simple alert function triggerd when the game is won by one of the players
 function alertWin(){
-  alert(CurrentPlayer +' have won')
+  alert(CurrentPlayer +' have won');
+  gameIsRunning = 0;
 
 }
-
+// function get adjacent and cellVal and winCheck was inspaierd by coder on the road https://codepen.io/coderontheroad/pen/GdxEo and twiked/fixed to work with my code
 function getAdj(row,col,row_inc,col_inc){
   if(cellVal(row,col) == cellVal(row+row_inc,col+col_inc)){
     return  1+getAdj(row+row_inc,col+col_inc,row_inc,col_inc);
@@ -96,13 +100,14 @@ function cellVal(row,col){
 };
 
 
-// winCheck should get the column and row and check if a horizantal, verticall or diagonal serise of 4 same value of current player occur then its should be a win
+// winCheck should get the column and row of cell which trigrred the event and check if a horizantal, verticall or diagonal serise of 4 same value of current player occur then its should be a win
+// winCheck check the index of the array and then call and match the adjacent of a cell the event trigrred from call the function cellVal to make sure that the adjacent cell is stil inside the index of the array
+// return an int value and if this value is greater than 2 which mean we have 4 adjacent cell for the same player which trigger the alertWin() function
 function winCheck(row,col){
-  console.log("row value "+row,'col value '+col);
-  if(getAdj(row,col,0,1)+getAdj(row,col,0,-1) > 2){
+    if(getAdj(row,col,0,1)+getAdj(row,col,0,-1) > 2){
     alertWin();
   } else {
-    if(getAdj(row,col,1,0) > 2){
+    if(getAdj(row,col,-1,0) > 2){
       alertWin();
     } else {
       if(getAdj(row,col,-1,1)+getAdj(row,col,1,-1) > 2){
@@ -119,57 +124,10 @@ function winCheck(row,col){
     }
   }
  }
-//
-// function getAdj(row,col,row_inc,col_inc){
-//   if(cellVal(row,col) == cellVal(row+row_inc,col+col_inc)){
-//     return 1+getAdj(row+row_inc,col+col_inc,row_inc,col_inc);
-//   } else {
-//     return 0;
-//   }
-// }
-//
-// function cellVal(row,col){
-//   if(indexArr[row] == undefined || indexArr[row][col] == undefined){
-//     return -1;
-//   } else {
-//     return indexArr[row][col];
-//   }
-// }
-
-
-  // for (i = 0; i <= 6; i++){
-  //   for(j = 0; j <=7; j++){
-  //     console.log(indexArr[i][j].Player);
-  //     if(indexArr[i][j].Player == CurrentPlayer) {
-  //       youWon++;
-  //       if(youWon==4){
-  //         alertWin();
-  //       }
-  //     }else {
-  //       youWon = 0;
-  //       return}
-  //   }
-  // }
-
-  // indexArr.map([row][col])
-
-
-  // if (col < 3) {
-  //         if(indexArr[row][col].Player==CurrentPlayer
-  //          &&indexArr[row][col + 1].Player==CurrentPlayer
-  //          &&indexArr[row][col + 2].Player==CurrentPlayer
-  //          &&indexArr[row][col + 3].Player==CurrentPlayer){
-  //
-  //           alertWin();
-  //         }
-  // }
-
-// };//end of winCheck()
-
-
 
 // click handler on the frame
 function onClick(e){
+  if(gameIsRunning == 1){
   //a function to check which player did make the click and which Sprite should be created
   function SpriteColor(){
     if(CurrentPlayer == 'p1'){
@@ -216,5 +174,7 @@ function onClick(e){
     }
 // add the instance of the sprite
    app.stage.addChild(Coin);
-   console.log(indexArr);
+}else{
+  alert('The game have finshed '+CurrentPlayer+' have won');
+}
 };
