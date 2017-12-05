@@ -1,9 +1,16 @@
 var gulp        = require('gulp');
 var browserSync = require('browser-sync').create();
+var babel       = require('gulp-babel');
+var plumber     = require('gulp-plumber');
+
 
 // process JS files and return the stream.
 gulp.task('js', function () {
     return gulp.src('js/*js')
+        .pipe(plumber())
+        .pipe(babel({
+          "presets": ['babel-preset-env'].map(require.resolve)
+        }))
         .pipe(gulp.dest('dist/js'));
 });
 
