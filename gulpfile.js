@@ -3,7 +3,7 @@ var browserSync = require('browser-sync').create();
 
 // process JS files and return the stream.
 gulp.task('js', function () {
-    return gulp.src('js/*js')
+    return gulp.src('dist/bundle/*js')
         .pipe(gulp.dest('dist/js'));
 });
 
@@ -26,7 +26,7 @@ gulp.task('default', ['js'], function () {
 
     // add browserSync.reload to the tasks array to make
     // all browsers reload after tasks are complete.
-    gulp.watch("*.js", ['js-watch']);
+    gulp.watch("app/*.js", ['js-watch']);
     gulp.watch("*.html", ['js-watch']);
     gulp.watch("style/*.css", ['js-watch']);
 });
