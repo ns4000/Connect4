@@ -3,7 +3,7 @@ const PIXI = require('pixi.js');
 
 export  class game{
   constructor(){
-    
+
   }
   init(){
     const app1 = new PIXI.Application(512,445,{backgroundColor:0Xf9f9f9});
@@ -85,7 +85,14 @@ export  class game{
 
         // a simple alert function triggerd when the game is won by one of the players
         function alertWin(){
-          alert(CurrentPlayer +' have won');
+          if(CurrentPlayer == 'p1')
+          {
+            alert("Blue Player have won");
+
+          }else{
+            alert("Red Player have won");
+          }
+          // alert(CurrentPlayer +' have won');
           gameIsRunning = 0;
 
         }

@@ -41417,7 +41417,12 @@
 	
 	      // a simple alert function triggerd when the game is won by one of the players
 	      function alertWin() {
-	        alert(CurrentPlayer + ' have won');
+	        if (CurrentPlayer == 'p1') {
+	          alert("Blue Player have won");
+	        } else {
+	          alert("Red Player have won");
+	        }
+	        // alert(CurrentPlayer +' have won');
 	        gameIsRunning = 0;
 	      }
 	      // function get adjacent and cellVal and winCheck was inspaierd by coder on the road https://codepen.io/coderontheroad/pen/GdxEo and twiked/fixed to work with my code
