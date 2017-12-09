@@ -41349,9 +41349,9 @@
 	  _createClass(game, [{
 	    key: 'init',
 	    value: function init() {
-	      var app1 = new PIXI.Application(512, 445, { backgroundColor: 0Xf9f9f9 });
-	      document.getElementById('display').appendChild(app1.view);
-	      // this.app1=app1;
+	      var app = new PIXI.Application(512, 440, { backgroundColor: 0Xf9f9f9 });
+	      document.getElementById('display').appendChild(app.view);
+	
 	      // a varilable to keep track which player is current set to default player 1 = p1
 	      var CurrentPlayer = "p1";
 	      // gameIsRunning is a varilable to check if the game is running or already finished
@@ -41360,14 +41360,14 @@
 	      var indexArr = [[{ Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }], [{ Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }], [{ Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }], [{ Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }], [{ Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }], [{ Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }]];
 	
 	      // Frame is the Sprite of the background
-	      var Frame = PIXI.Sprite.fromImage('images/fial_board.png');
-	      Frame.scale.set(0.71);
+	      var frame = PIXI.Sprite.fromImage('images/fial_board.png');
+	      frame.scale.set(0.71);
 	      // adding the frame to contanier
-	      app1.stage.addChild(Frame);
+	      app.stage.addChild(frame);
 	
-	      // setting the Frame interactive and adding an event for mouse cliking
-	      Frame.interactive = true;
-	      Frame.on('pointerup', onClick);
+	      // setting the frame interactive and adding an event for mouse cliking
+	      frame.interactive = true;
+	      frame.on('pointerup', onClick);
 	
 	      // a function to switch between first and second Player
 	      function switchPlayer() {
@@ -41516,7 +41516,7 @@
 	            switchPlayer();
 	          }
 	          // add the instance of the sprite
-	          app1.stage.addChild(Coin);
+	          app.stage.addChild(Coin);
 	        } else {
 	          alert('The game have finshed ' + CurrentPlayer + ' have won');
 	        }
