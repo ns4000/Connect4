@@ -5,12 +5,28 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "browser-sync start --server --files '*.js'"
+    "start": "concurrently \"gulp\" \"npm run dev\" ",
+    "dev": "webpack --config webpack.config.js --progress --inline --colors --watch"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "browser-sync": "^2.18.13",
-    "gulp": "^3.9.1"
+    "gulp": "^3.9.1",
+    "webpack": "^1.12.9"
+  },
+  "devDependencies": {
+    "babel-core": "^6.3.17",
+    "babel-loader": "^6.2.0",
+    "babel-preset-es2015": "^6.3.13",
+    "babel-preset-stage-0": "^6.3.13",
+    "babel-runtime": "^6.3.13",
+    "brfs": "^1.4.1",
+    "concurrently": "^3.5.1",
+    "json-loader": "^0.5.4",
+    "pixi-animationloop": "^1.0.7",
+    "pixi.js": "latest",
+    "transform-loader": "^0.2.3",
+    "webpack": "^1.12.9"
   }
 }
