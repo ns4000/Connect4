@@ -1,54 +1,53 @@
-const PIXI = require('pixi.js');
-
+const PIXI   = require('pixi.js');
+import config from "./config.js";
 
 export  class game{
   constructor(){
 
   }
-  init(){
-    const app = new PIXI.Application(512,440,{backgroundColor:0Xf9f9f9});
+  init(config){
+    const app = new PIXI.Application(config.width,config.height,config.renderOption);
     document.getElementById('display').appendChild(app.view);
-    
-    // a varilable to keep track which player is current set to default player 1 = p1
+
+    // a varilable to keep track which player is current,set to default player 1 = p1
     let CurrentPlayer = "p1";
     // gameIsRunning is a varilable to check if the game is running or already finished
     let gameIsRunning = 1 ;
+
+    // Frame is the Sprite of the background
+    const frame = PIXI.Sprite.fromImage('images/fial_board.png');
+    frame.scale.set(0.71);
+    // adding the frame to contanier
+    app.stage.addChild(frame);
+    // setting the frame interactive and adding an event for mouse cliking, and onClick call function is main trigger for the whole logic
+    frame.interactive = true;
+    frame.on('pointerup',onClick);
+
     // indexArr is gona work as refrence to match the postion of the coins of which CurrentPlayer and help decied the win condetion
     let indexArr = [[{Player:null},{Player:null},{Player:null},{Player:null},{Player:null},{Player:null},{Player:null}],
-                    [{Player:null},{Player:null},{Player:null},{Player:null},{Player:null},{Player:null},{Player:null}],
-                    [{Player:null},{Player:null},{Player:null},{Player:null},{Player:null},{Player:null},{Player:null}],
-                    [{Player:null},{Player:null},{Player:null},{Player:null},{Player:null},{Player:null},{Player:null}],
-                    [{Player:null},{Player:null},{Player:null},{Player:null},{Player:null},{Player:null},{Player:null}],
-                    [{Player:null},{Player:null},{Player:null},{Player:null},{Player:null},{Player:null},{Player:null}]
-                      ];
+    [{Player:null},{Player:null},{Player:null},{Player:null},{Player:null},{Player:null},{Player:null}],
+    [{Player:null},{Player:null},{Player:null},{Player:null},{Player:null},{Player:null},{Player:null}],
+    [{Player:null},{Player:null},{Player:null},{Player:null},{Player:null},{Player:null},{Player:null}],
+    [{Player:null},{Player:null},{Player:null},{Player:null},{Player:null},{Player:null},{Player:null}],
+    [{Player:null},{Player:null},{Player:null},{Player:null},{Player:null},{Player:null},{Player:null}]
+  ];
 
 
-  // Frame is the Sprite of the background
-  let frame = PIXI.Sprite.fromImage('images/fial_board.png');
-      frame.scale.set(0.71);
-  // adding the frame to contanier
-  app.stage.addChild(frame);
 
-  // setting the frame interactive and adding an event for mouse cliking
-  frame.interactive = true;
-  frame.on('pointerup',onClick);
-
-  // a function to switch between first and second Player
-  function switchPlayer(){
-    if (CurrentPlayer == "p1")
-        CurrentPlayer =  "p2";
-    else
-        CurrentPlayer =  "p1";
-  };
+    // a function to switch between first and second Player
+    function switchPlayer(){
+      if (CurrentPlayer == "p1")
+          CurrentPlayer =  "p2";
+      else
+          CurrentPlayer =  "p1";
+    };
 
 
-  // need to add a if statment for row check if full
   // checking wheather a cell of the array is empty if so add a coin with a refrence to which player
   function checkIndex(col){
     if(indexArr[0][col].Player == null){
        indexArr[0][col].Player = CurrentPlayer;
        winCheck(0,col);
-       // switchPlayer();
        return 0;// this return value is to determin which row the coin should go to
     }else if(indexArr[1][col].Player == null){
              indexArr[1][col].Player = CurrentPlayer;
@@ -94,8 +93,8 @@ export  class game{
       }
       // alert(CurrentPlayer +' have won');
       gameIsRunning = 0;
+    };
 
-    }
     // function get adjacent and cellVal and winCheck was inspaierd by coder on the road https://codepen.io/coderontheroad/pen/GdxEo and twiked/fixed to work with my code
     function getAdj(row,col,row_inc,col_inc){
       if(cellVal(row,col) == cellVal(row+row_inc,col+col_inc)){
@@ -192,10 +191,9 @@ export  class game{
     alert('The game have finshed '+CurrentPlayer+' have won');
   }
   };
-
  }
 }
 
-let g1 =new game();
-g1.init();
+let newGame =new game();
+newGame.init(config);
   // let app1 =new game();
