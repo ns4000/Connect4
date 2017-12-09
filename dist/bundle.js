@@ -41334,8 +41334,15 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.game = undefined;
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _config = __webpack_require__(191);
+	
+	var _config2 = _interopRequireDefault(_config);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -41348,39 +41355,37 @@
 	
 	  _createClass(game, [{
 	    key: 'init',
-	    value: function init() {
-	      var app = new PIXI.Application(512, 440, { backgroundColor: 0Xf9f9f9 });
+	    value: function init(config) {
+	      var app = new PIXI.Application(config.width, config.height, config.renderOption);
 	      document.getElementById('display').appendChild(app.view);
 	
-	      // a varilable to keep track which player is current set to default player 1 = p1
+	      // a varilable to keep track which player is current,set to default player 1 = p1
 	      var CurrentPlayer = "p1";
 	      // gameIsRunning is a varilable to check if the game is running or already finished
 	      var gameIsRunning = 1;
-	      // indexArr is gona work as refrence to match the postion of the coins of which CurrentPlayer and help decied the win condetion
-	      var indexArr = [[{ Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }], [{ Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }], [{ Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }], [{ Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }], [{ Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }], [{ Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }]];
 	
 	      // Frame is the Sprite of the background
 	      var frame = PIXI.Sprite.fromImage('images/fial_board.png');
 	      frame.scale.set(0.71);
 	      // adding the frame to contanier
 	      app.stage.addChild(frame);
-	
-	      // setting the frame interactive and adding an event for mouse cliking
+	      // setting the frame interactive and adding an event for mouse cliking, and onClick call function is main trigger for the whole logic
 	      frame.interactive = true;
 	      frame.on('pointerup', onClick);
+	
+	      // indexArr is gona work as refrence to match the postion of the coins of which CurrentPlayer and help decied the win condetion
+	      var indexArr = [[{ Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }], [{ Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }], [{ Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }], [{ Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }], [{ Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }], [{ Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }]];
 	
 	      // a function to switch between first and second Player
 	      function switchPlayer() {
 	        if (CurrentPlayer == "p1") CurrentPlayer = "p2";else CurrentPlayer = "p1";
 	      };
 	
-	      // need to add a if statment for row check if full
 	      // checking wheather a cell of the array is empty if so add a coin with a refrence to which player
 	      function checkIndex(col) {
 	        if (indexArr[0][col].Player == null) {
 	          indexArr[0][col].Player = CurrentPlayer;
 	          winCheck(0, col);
-	          // switchPlayer();
 	          return 0; // this return value is to determin which row the coin should go to
 	        } else if (indexArr[1][col].Player == null) {
 	          indexArr[1][col].Player = CurrentPlayer;
@@ -41424,7 +41429,8 @@
 	        }
 	        // alert(CurrentPlayer +' have won');
 	        gameIsRunning = 0;
-	      }
+	      };
+	
 	      // function get adjacent and cellVal and winCheck was inspaierd by coder on the road https://codepen.io/coderontheroad/pen/GdxEo and twiked/fixed to work with my code
 	      function getAdj(row, col, row_inc, col_inc) {
 	        if (cellVal(row, col) == cellVal(row + row_inc, col + col_inc)) {
@@ -41527,9 +41533,26 @@
 	  return game;
 	}();
 	
-	var g1 = new game();
-	g1.init();
+	var newGame = new game();
+	newGame.init(_config2.default);
 	// let app1 =new game();
+
+/***/ }),
+/* 191 */
+/***/ (function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = {
+	  width: 512,
+	  height: 440,
+	  renderOption: {
+	    backgroundColor: 0Xf9f9f9
+	  }
+	};
 
 /***/ })
 /******/ ]);
