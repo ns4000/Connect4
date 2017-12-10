@@ -1,16 +1,21 @@
 const PIXI   = require('pixi.js');
-import config from "./config.js";
+import config from "./Config.js";
+import Coin from "./Coin.js";
 
 export  class game{
   constructor(){
 
+    this.init(config);
   }
+
   init(config){
+
     const app = new PIXI.Application(config.width,config.height,config.renderOption);
     document.getElementById('display').appendChild(app.view);
-
     // a varilable to keep track which player is current,set to default player 1 = p1
     let CurrentPlayer = "p1";
+    //a variable to save which player have won
+    let winner ="";
     // gameIsRunning is a varilable to check if the game is running or already finished
     let gameIsRunning = 1 ;
 
@@ -24,15 +29,15 @@ export  class game{
     frame.on('pointerup',onClick);
 
     // indexArr is gona work as refrence to match the postion of the coins of which CurrentPlayer and help decied the win condetion
-    let indexArr = [[{Player:null},{Player:null},{Player:null},{Player:null},{Player:null},{Player:null},{Player:null}],
-    [{Player:null},{Player:null},{Player:null},{Player:null},{Player:null},{Player:null},{Player:null}],
-    [{Player:null},{Player:null},{Player:null},{Player:null},{Player:null},{Player:null},{Player:null}],
-    [{Player:null},{Player:null},{Player:null},{Player:null},{Player:null},{Player:null},{Player:null}],
-    [{Player:null},{Player:null},{Player:null},{Player:null},{Player:null},{Player:null},{Player:null}],
-    [{Player:null},{Player:null},{Player:null},{Player:null},{Player:null},{Player:null},{Player:null}]
-  ];
-
-
+    var indexArr = []
+    for (var i = 0; i < 6; i++) {
+      indexArr[i] = []
+      for (var n = 0; n <= 6; n++) {
+        indexArr[i].push({
+          Player: null
+        })
+      }
+    };
 
     // a function to switch between first and second Player
     function switchPlayer(){
@@ -43,42 +48,13 @@ export  class game{
     };
 
 
-  // checking wheather a cell of the array is empty if so add a coin with a refrence to which player
+  // checking wheather a cell of the array is empty,if so add a coin with a refrence to which player
   function checkIndex(col){
-    if(indexArr[0][col].Player == null){
-       indexArr[0][col].Player = CurrentPlayer;
-       winCheck(0,col);
-       return 0;// this return value is to determin which row the coin should go to
-    }else if(indexArr[1][col].Player == null){
-             indexArr[1][col].Player = CurrentPlayer;
-             winCheck(1,col);
-
-       return 1;
-    }else if(indexArr[2][col].Player == null){
-             indexArr[2][col].Player = CurrentPlayer;
-             winCheck(2,col);
-
-       return 2;
-    }else if(indexArr[3][col].Player == null){
-             indexArr[3][col].Player = CurrentPlayer;
-             winCheck(3,col);
-
-       return 3;
-    }else if(indexArr[4][col].Player == null){
-             indexArr[4][col].Player = CurrentPlayer;
-             winCheck(4,col);
-
-       return 4;
-    }else if(indexArr[5][col].Player == null){
-             indexArr[5][col].Player = CurrentPlayer;
-             winCheck(5,col);
-
-       return 5;
-    }else if(indexArr[6][col].Player == null){
-             indexArr[6][col].Player = CurrentPlayer;
-             winCheck(6,col);
-
-       return 6;
+    for(let i = 0; i<= 6;i++)
+      if(indexArr[i][col].Player == null){
+         indexArr[i][col].Player = CurrentPlayer;
+         winCheck(i,col);
+         return i;// this return value is to determin which row the coin should go to
     }
   };
 
@@ -86,10 +62,12 @@ export  class game{
     function alertWin(){
       if(CurrentPlayer == 'p1')
       {
+        winner = 'blue';
         alert("Blue Player have won");
 
       }else{
-        alert("Red Player have won");
+        winner ='Orange'
+        alert("Orange Player have won");
       }
       // alert(CurrentPlayer +' have won');
       gameIsRunning = 0;
@@ -144,56 +122,54 @@ export  class game{
     //a function to check which player did make the click and which Sprite should be created
     function SpriteColor(){
       if(CurrentPlayer == 'p1'){
-      return "images/bluePlayer.png";
+      return "blue";
     }else
-      return "images/orangePlayer.png";
+      return "orange";
     }
     // creat an instance of sprite depending on which player is on right now
-    let Coin = PIXI.Sprite.fromImage(SpriteColor());
-    Coin.anchor.set(0.5); //center the anchor for the Sprite
+    let newCoin = new Coin(SpriteColor());
+    // Coin.anchor.set(0.5); //center the anchor for the Sprite
 
 
     // check which colume the click event happend with, if x is smaller than 80px then its the first column and so on
     let xx = e.data.global.x;
 
     if(xx<80){
-        Coin.x = 40;
-        Coin.y = 396-(checkIndex(0)*71); // after checking the index assign y value accordenling
+        newCoin.x = 8;
+        newCoin.y = 364-(checkIndex(0)*71); // after checking the index assign y value accordenling
          switchPlayer();
       }else if(xx<150){
-        Coin.x = 111;
-        Coin.y = 396-(checkIndex(1)*71);
+        newCoin.x = 79;
+        newCoin.y = 364-(checkIndex(1)*71);
         switchPlayer();
       }else if(xx<220){
-        Coin.x = 182;
-        Coin.y = 396-(checkIndex(2)*71);
+        newCoin.x = 151;
+        newCoin.y = 364-(checkIndex(2)*71);
         switchPlayer();
       }else if(xx<290){
-        Coin.x = 253;
-        Coin.y = 396-(checkIndex(3)*71);
+        newCoin.x = 221;
+        newCoin.y = 364-(checkIndex(3)*71);
         switchPlayer();
       }else if(xx<370){
-        Coin.x = 323;
-        Coin.y = 396-(checkIndex(4)*71);
+        newCoin.x = 293;
+        newCoin.y = 364-(checkIndex(4)*71);
         switchPlayer();
       }else if(xx<430){
-        Coin.x = 395;
-        Coin.y = 396-(checkIndex(5)*71);
+        newCoin.x = 363;
+        newCoin.y = 364-(checkIndex(5)*71);
         switchPlayer();
       }else if(xx<550){
-        Coin.x = 466;
-        Coin.y = 396-(checkIndex(6)*71);
+        newCoin.x = 434;
+        newCoin.y = 364-(checkIndex(6)*71);
         switchPlayer();
       }
   // add the instance of the sprite
-     app.stage.addChild(Coin);
-  }else{
-    alert('The game have finshed '+CurrentPlayer+' have won');
+     app.stage.addChild(newCoin);
+  }else{ // if the game is already finished alert the player of it 
+    alert('The game have finshed '+ winner +' have won');
   }
   };
  }
 }
 
-let newGame =new game();
-newGame.init(config);
-  // let app1 =new game();
+let newGame = new game();
