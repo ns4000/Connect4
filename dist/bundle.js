@@ -41329,7 +41329,7 @@
 /* 190 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -41338,9 +41338,13 @@
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _config = __webpack_require__(191);
+	var _Config = __webpack_require__(191);
 	
-	var _config2 = _interopRequireDefault(_config);
+	var _Config2 = _interopRequireDefault(_Config);
+	
+	var _Coin = __webpack_require__(192);
+	
+	var _Coin2 = _interopRequireDefault(_Coin);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -41351,16 +41355,20 @@
 	var game = exports.game = function () {
 	  function game() {
 	    _classCallCheck(this, game);
+	
+	    this.init(_Config2.default);
 	  }
 	
 	  _createClass(game, [{
-	    key: 'init',
+	    key: "init",
 	    value: function init(config) {
+	
 	      var app = new PIXI.Application(config.width, config.height, config.renderOption);
 	      document.getElementById('display').appendChild(app.view);
-	
 	      // a varilable to keep track which player is current,set to default player 1 = p1
 	      var CurrentPlayer = "p1";
+	      //a variable to save which player have won
+	      var winner = "";
 	      // gameIsRunning is a varilable to check if the game is running or already finished
 	      var gameIsRunning = 1;
 	
@@ -41374,58 +41382,40 @@
 	      frame.on('pointerup', onClick);
 	
 	      // indexArr is gona work as refrence to match the postion of the coins of which CurrentPlayer and help decied the win condetion
-	      var indexArr = [[{ Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }], [{ Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }], [{ Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }], [{ Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }], [{ Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }], [{ Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }, { Player: null }]];
+	      var indexArr = [];
+	      for (var i = 0; i < 6; i++) {
+	        indexArr[i] = [];
+	        for (var n = 0; n <= 6; n++) {
+	          indexArr[i].push({
+	            Player: null
+	          });
+	        }
+	      };
 	
 	      // a function to switch between first and second Player
 	      function switchPlayer() {
 	        if (CurrentPlayer == "p1") CurrentPlayer = "p2";else CurrentPlayer = "p1";
 	      };
 	
-	      // checking wheather a cell of the array is empty if so add a coin with a refrence to which player
+	      // checking wheather a cell of the array is empty,if so add a coin with a refrence to which player
 	      function checkIndex(col) {
-	        if (indexArr[0][col].Player == null) {
-	          indexArr[0][col].Player = CurrentPlayer;
-	          winCheck(0, col);
-	          return 0; // this return value is to determin which row the coin should go to
-	        } else if (indexArr[1][col].Player == null) {
-	          indexArr[1][col].Player = CurrentPlayer;
-	          winCheck(1, col);
-	
-	          return 1;
-	        } else if (indexArr[2][col].Player == null) {
-	          indexArr[2][col].Player = CurrentPlayer;
-	          winCheck(2, col);
-	
-	          return 2;
-	        } else if (indexArr[3][col].Player == null) {
-	          indexArr[3][col].Player = CurrentPlayer;
-	          winCheck(3, col);
-	
-	          return 3;
-	        } else if (indexArr[4][col].Player == null) {
-	          indexArr[4][col].Player = CurrentPlayer;
-	          winCheck(4, col);
-	
-	          return 4;
-	        } else if (indexArr[5][col].Player == null) {
-	          indexArr[5][col].Player = CurrentPlayer;
-	          winCheck(5, col);
-	
-	          return 5;
-	        } else if (indexArr[6][col].Player == null) {
-	          indexArr[6][col].Player = CurrentPlayer;
-	          winCheck(6, col);
-	
-	          return 6;
+	        for (var _i = 0; _i <= 6; _i++) {
+	          if (indexArr[_i][col].Player == null) {
+	            indexArr[_i][col].Player = CurrentPlayer;
+	            winCheck(_i, col);
+	            return _i; // this return value is to determin which row the coin should go to
+	          }
 	        }
 	      };
 	
 	      // a simple alert function triggerd when the game is won by one of the players
 	      function alertWin() {
 	        if (CurrentPlayer == 'p1') {
+	          winner = 'blue';
 	          alert("Blue Player have won");
 	        } else {
-	          alert("Red Player have won");
+	          winner = 'Orange';
+	          alert("Orange Player have won");
 	        }
 	        // alert(CurrentPlayer +' have won');
 	        gameIsRunning = 0;
@@ -41479,52 +41469,53 @@
 	          //a function to check which player did make the click and which Sprite should be created
 	          var SpriteColor = function SpriteColor() {
 	            if (CurrentPlayer == 'p1') {
-	              return "images/bluePlayer.png";
-	            } else return "images/orangePlayer.png";
+	              return "blue";
+	            } else return "orange";
 	          };
 	          // creat an instance of sprite depending on which player is on right now
 	
 	
-	          var Coin = PIXI.Sprite.fromImage(SpriteColor());
-	          Coin.anchor.set(0.5); //center the anchor for the Sprite
+	          var newCoin = new _Coin2.default(SpriteColor());
+	          // Coin.anchor.set(0.5); //center the anchor for the Sprite
 	
 	
 	          // check which colume the click event happend with, if x is smaller than 80px then its the first column and so on
 	          var xx = e.data.global.x;
 	
 	          if (xx < 80) {
-	            Coin.x = 40;
-	            Coin.y = 396 - checkIndex(0) * 71; // after checking the index assign y value accordenling
+	            newCoin.x = 8;
+	            newCoin.y = 364 - checkIndex(0) * 71; // after checking the index assign y value accordenling
 	            switchPlayer();
 	          } else if (xx < 150) {
-	            Coin.x = 111;
-	            Coin.y = 396 - checkIndex(1) * 71;
+	            newCoin.x = 79;
+	            newCoin.y = 364 - checkIndex(1) * 71;
 	            switchPlayer();
 	          } else if (xx < 220) {
-	            Coin.x = 182;
-	            Coin.y = 396 - checkIndex(2) * 71;
+	            newCoin.x = 151;
+	            newCoin.y = 364 - checkIndex(2) * 71;
 	            switchPlayer();
 	          } else if (xx < 290) {
-	            Coin.x = 253;
-	            Coin.y = 396 - checkIndex(3) * 71;
+	            newCoin.x = 221;
+	            newCoin.y = 364 - checkIndex(3) * 71;
 	            switchPlayer();
 	          } else if (xx < 370) {
-	            Coin.x = 323;
-	            Coin.y = 396 - checkIndex(4) * 71;
+	            newCoin.x = 293;
+	            newCoin.y = 364 - checkIndex(4) * 71;
 	            switchPlayer();
 	          } else if (xx < 430) {
-	            Coin.x = 395;
-	            Coin.y = 396 - checkIndex(5) * 71;
+	            newCoin.x = 363;
+	            newCoin.y = 364 - checkIndex(5) * 71;
 	            switchPlayer();
 	          } else if (xx < 550) {
-	            Coin.x = 466;
-	            Coin.y = 396 - checkIndex(6) * 71;
+	            newCoin.x = 434;
+	            newCoin.y = 364 - checkIndex(6) * 71;
 	            switchPlayer();
 	          }
 	          // add the instance of the sprite
-	          app.stage.addChild(Coin);
+	          app.stage.addChild(newCoin);
 	        } else {
-	          alert('The game have finshed ' + CurrentPlayer + ' have won');
+	          // if the game is already finished alert the player of it 
+	          alert('The game have finshed ' + winner + ' have won');
 	        }
 	      };
 	    }
@@ -41534,8 +41525,6 @@
 	}();
 	
 	var newGame = new game();
-	newGame.init(_config2.default);
-	// let app1 =new game();
 
 /***/ }),
 /* 191 */
@@ -41553,6 +41542,44 @@
 	    backgroundColor: 0Xf9f9f9
 	  }
 	};
+
+/***/ }),
+/* 192 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _pixi = __webpack_require__(1);
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var Coin = function (_Sprite) {
+	  _inherits(Coin, _Sprite);
+	
+	  function Coin(coinColor) {
+	    var _ret;
+	
+	    _classCallCheck(this, Coin);
+	
+	    var _this = _possibleConstructorReturn(this, (Coin.__proto__ || Object.getPrototypeOf(Coin)).call(this));
+	
+	    return _ret = PIXI.Sprite.fromImage('./images/' + coinColor + 'Player.png'), _possibleConstructorReturn(_this, _ret);
+	    _this.anchor.set(0.5);
+	    return _this;
+	  }
+	
+	  return Coin;
+	}(_pixi.Sprite);
+	
+	exports.default = Coin;
 
 /***/ })
 /******/ ]);
