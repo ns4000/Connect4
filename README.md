@@ -1,5 +1,9 @@
-C o n n e c t 4
+# C o n n e c t 4
+### To run please first run the command:
 
-To run please first run the command:
--  npm install  
--  npm start
+1.  Git clone the repo https://github.com/ns4000/Connect4.git
+2.  npm install  
+3.  npm start
+
+
+###### friendly reminder : node.js is required to run 
