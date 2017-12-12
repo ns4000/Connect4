@@ -178,10 +178,10 @@ export  class game{
     }else{ // if the game is already finished alert the player of it
       let message = confirm('The game have finshed '+ this.winner +' have won, Start a new game?');
       if(message == true){
-        this.app.stage.removeChildren(1);
-        this.gameIsRunning = true;
-        this.indexArr = [];
-        this.init(this.frame,this.indexArr);
+        // this.app.stage.removeChildren(1);
+        // this.gameIsRunning = true;
+        // this.indexArr = [];
+        // this.init(this.frame,this.indexArr);
         // need to rest the array and reRender the frame and coin sprite
         alert("Coming soon in the next version :D")
       }
