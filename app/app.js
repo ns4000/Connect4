@@ -28,9 +28,13 @@ export  class game{
 
 
     this.init(this.frame);
-  }
+
+  }//end of constructor
+
 
   init (frame) {
+    this.indexArr.length= 0;
+    //indexArr init with 7 by 6 matrix each cell with player default
     for (var i = 0; i < 6; i++) {
       this.indexArr[i] = []
       for (var n = 0; n <= 6; n++) {
@@ -39,7 +43,7 @@ export  class game{
         })
       }
     };
-
+    // register event handler click event
     frame.on('pointerup', ((event) => {
       this.onClick(event, this);
       }).bind(this));
@@ -58,16 +62,13 @@ export  class game{
   // a simple alert function triggerd when the game is won by one of the players
   alertWin(){
     if(this.currentPlayer == 'p1')
-    {
-
-      this.winner = 'Blue';
-      alert("Blue Player have won");
-
-    }else{
-      this.winner ='Orange'
-      alert("Orange Player have won");
-    }
-    // alert(CurrentPlayer +' have won');
+      {
+        this.winner = 'Blue';
+        alert("Blue Player have won");
+      }else{
+        this.winner ='Orange'
+        alert("Orange Player have won");
+      }
     this.gameIsRunning = false;
    };
 
@@ -143,6 +144,7 @@ export  class game{
     let xx = e.data.global.x;
 
     if(xx<80){
+
         newCoin.x = 8;
         newCoin.y = 364-(this.checkIndex(0)*71); // after checking the index assign y value accordenling
          this.switchPlayer();
@@ -172,15 +174,16 @@ export  class game{
         this.switchPlayer();
       }
     // add the instance of the sprite
-console.log(this.app);
        this.app.stage.addChild(newCoin);
     }else{ // if the game is already finished alert the player of it
       let message = confirm('The game have finshed '+ this.winner +' have won, Start a new game?');
       if(message == true){
+        this.app.stage.removeChildren(1);
+        this.gameIsRunning = true;
+        this.indexArr = [];
+        this.init(this.frame,this.indexArr);
         // need to rest the array and reRender the frame and coin sprite
-        // this.app.removeChild(frame);
-        // this.gameIsRunning = true;
-        // this.init(this.frame);
+        alert("Coming soon in the next version :D")
       }
 
     }
