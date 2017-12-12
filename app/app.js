@@ -1,13 +1,15 @@
 const PIXI   = require('pixi.js');
-import config from "./Config.js";
+import defaults from "./Config.js";
 import Coin   from "./Coin.js";
 import Frame  from "./Frame.js";
 
-export  class game{
+export  class Game{
 
-  constructor(config){
+  constructor(domNode, optionObj){
+    const config = optionObj || defaults;
+
     this.app = new PIXI.Application(config.width,config.height,config.renderOption);
-    document.getElementById('display').appendChild(this.app.view);
+    domNode.appendChild(this.app.view);
 
     // a varilable to keep track which player is current,set to default player 1 = p1
     this.currentPlayer = "p1";
@@ -33,16 +35,17 @@ export  class game{
 
 
   init (frame) {
-    this.indexArr.length= 0;
+
     //indexArr init with 7 by 6 matrix each cell with player default
-    for (var i = 0; i < 6; i++) {
+    for (let i = 0; i < 6; i++) {
       this.indexArr[i] = []
-      for (var n = 0; n <= 6; n++) {
+      for (let n = 0; n <= 6; n++) {
         this.indexArr[i].push({
           Player: null
         })
       }
     };
+
     // register event handler click event
     frame.on('pointerup', ((event) => {
       this.onClick(event, this);
@@ -178,12 +181,12 @@ export  class game{
     }else{ // if the game is already finished alert the player of it
       let message = confirm('The game have finshed '+ this.winner +' have won, Start a new game?');
       if(message == true){
-        // this.app.stage.removeChildren(1);
-        // this.gameIsRunning = true;
-        // this.indexArr = [];
-        // this.init(this.frame,this.indexArr);
-        // need to rest the array and reRender the frame and coin sprite
-        alert("Coming soon in the next version :D")
+        this.app.stage.removeChildren(1);
+        this.gameIsRunning = true;
+        this.frame.removeAllListeners();
+        this.indexArr = [];
+        this.init(this.frame);
+
       }
 
     }
@@ -191,4 +194,4 @@ export  class game{
 
 };
 
-let newGame = new game(config);
+let newGame = new Game(document.getElementById('display'));
