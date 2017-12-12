@@ -6,4 +6,5 @@
 3.  npm start
 
 
-###### friendly reminder : node.js is required to run 
+###### friendly reminder : node.js is required to run
+###### you can check out as well here: https://ns4000.github.io/Connect4/

@@ -65,10 +65,10 @@ export  class Game{
     if(this.currentPlayer == 'p1')
       {
         this.winner = 'Blue';
-        alert("Blue Player have won");
+        alert("Blue Player has won");
       }else{
         this.winner ='Orange'
-        alert("Orange Player have won");
+        alert("Orange Player has won");
       }
     this.gameIsRunning = false;
    };
@@ -176,7 +176,7 @@ export  class Game{
          // add the instance of the sprite
          this.app.stage.addChild(newCoin);
     }else{ // if the game is already finished alert the player of it and check if he wants to start a new game
-      let message = confirm('The game have finshed '+ this.winner +' have won, Start a new game?');
+      let message = confirm('The game have finshed '+ this.winner +' has won, Start a new game?');
       if(message == true){
         //resting all required variable and listeners to make the game restart
         this.app.stage.removeChildren(1);
