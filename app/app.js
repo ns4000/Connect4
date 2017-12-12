@@ -19,23 +19,21 @@ export  class Game{
     this.gameIsRunning = true ;
     // instance of the Frame Sprite found in Frame.js
     this.frame = new Frame();
+    //scale the frame image to the size of the size of the canvas
     this.frame.scale.set(0.71);
     // setting the frame interactive and adding an event for mouse cliking, and onClick call function is main trigger for the whole logic
     this.frame.interactive = true;
     // adding the frame to contanier
     this.app.stage.addChild(this.frame);
-
     // indexArr is gona work as refrence to match the postion of the coins of which CurrentPlayer and help decied the win condetion
-     this.indexArr = []
-
-
+    this.indexArr = []
+    // calling the init method to init the index and register the event handler
     this.init(this.frame);
 
   }//end of constructor
 
 
   init (frame) {
-
     //indexArr init with 7 by 6 matrix each cell with player default
     for (let i = 0; i < 6; i++) {
       this.indexArr[i] = []
@@ -127,6 +125,7 @@ export  class Game{
     }
   };
 
+  //the color of the coin sprite depend on the currentplayer
   spriteColor(){
     if(this.currentPlayer == 'p1'){
       return "blue";
@@ -136,62 +135,58 @@ export  class Game{
 
   // click handler on the frame Sprite
   onClick(e){
-
+    // gameIsRunning
     if(this.gameIsRunning == true){
-    //a function to check which player did make the click and which Sprite should be created
 
-    // creat an instance of sprite depending on which player is on right now
-    let newCoin = new Coin(this.spriteColor());
+      // creat an instance of sprite depending on which player is on right now
+      let newCoin = new Coin(this.spriteColor());
 
-    // check which colume the click event happend with, if x is smaller than 80px then its the first column and so on
-    let xx = e.data.global.x;
+      // check which colume the click event happend with, if x is smaller than 80px then its the first column and so on
+      let xx = e.data.global.x;
 
-    if(xx<80){
-
-        newCoin.x = 8;
-        newCoin.y = 364-(this.checkIndex(0)*71); // after checking the index assign y value accordenling
-         this.switchPlayer();
-      }else if(xx<150){
-        newCoin.x = 79;
-        newCoin.y = 364-(this.checkIndex(1)*71);
-        this.switchPlayer();
-      }else if(xx<220){
-        newCoin.x = 151;
-        newCoin.y = 364-(this.checkIndex(2)*71);
-        this.switchPlayer();
-      }else if(xx<290){
-        newCoin.x = 221;
-        newCoin.y = 364-(this.checkIndex(3)*71);
-        this.switchPlayer();
-      }else if(xx<370){
-        newCoin.x = 293;
-        newCoin.y = 364-(this.checkIndex(4)*71);
-        this.switchPlayer();
-      }else if(xx<430){
-        newCoin.x = 363;
-        newCoin.y = 364-(this.checkIndex(5)*71);
-        this.switchPlayer();
-      }else if(xx<550){
-        newCoin.x = 434;
-        newCoin.y = 364-(this.checkIndex(6)*71);
-        this.switchPlayer();
-      }
-    // add the instance of the sprite
-       this.app.stage.addChild(newCoin);
-    }else{ // if the game is already finished alert the player of it
+      if(xx<80){
+          newCoin.x = 8;
+          newCoin.y = 364-(this.checkIndex(0)*71); // after checking the index assign y value accordenling
+           this.switchPlayer(); // after creating and assiging the sprite switch the current player
+        }else if(xx<150){
+          newCoin.x = 79;
+          newCoin.y = 364-(this.checkIndex(1)*71);
+          this.switchPlayer();
+        }else if(xx<220){
+          newCoin.x = 151;
+          newCoin.y = 364-(this.checkIndex(2)*71);
+          this.switchPlayer();
+        }else if(xx<290){
+          newCoin.x = 221;
+          newCoin.y = 364-(this.checkIndex(3)*71);
+          this.switchPlayer();
+        }else if(xx<370){
+          newCoin.x = 293;
+          newCoin.y = 364-(this.checkIndex(4)*71);
+          this.switchPlayer();
+        }else if(xx<430){
+          newCoin.x = 363;
+          newCoin.y = 364-(this.checkIndex(5)*71);
+          this.switchPlayer();
+        }else if(xx<550){
+          newCoin.x = 434;
+          newCoin.y = 364-(this.checkIndex(6)*71);
+          this.switchPlayer();
+        }
+         // add the instance of the sprite
+         this.app.stage.addChild(newCoin);
+    }else{ // if the game is already finished alert the player of it and check if he wants to start a new game
       let message = confirm('The game have finshed '+ this.winner +' have won, Start a new game?');
       if(message == true){
+        //resting all required variable and listeners to make the game restart
         this.app.stage.removeChildren(1);
         this.gameIsRunning = true;
         this.frame.removeAllListeners();
         this.indexArr = [];
         this.init(this.frame);
-
       }
-
     }
   };
-
-};
+}
 
 let newGame = new Game(document.getElementById('display'));
