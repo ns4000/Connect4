@@ -5,7 +5,7 @@ export default class Frame extends Sprite{
  		super();
 
     // Frame is the Sprite of the background
-    return PIXI.Sprite.fromImage('images/fial_board.png');
-    
+    return PIXI.Sprite.fromImage('images/board.png');
+
   }
 }
