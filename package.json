@@ -1,20 +1,20 @@
 {
   "name": "pixijs",
   "version": "1.0.0",
-  "description": "",
+  "description": "Connect4 game built with PixiJS",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "concurrently \"gulp\" \"npm run dev\" ",
-    "dev": "webpack --config webpack.config.js --progress --inline --colors --watch",
-    "build": "webpack -p && gh-pages -d dist"
+    "dev": "concurrently \"gulp\" \"npm run watch\"",
+    "watch": "webpack --config webpack.config.js --progress --inline --colors --watch",
+    "build": "webpack -p",
+    "start": "serve -s . -l $PORT",
+    "deploy": "webpack -p && gh-pages -d dist"
   },
   "author": "Nabeel",
   "license": "MIT",
   "dependencies": {
-    "browser-sync": "^2.26.7",
-    "gulp": "^4.0.2",
-    "webpack": "^1.12.9"
+    "serve": "^14.2.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
@@ -23,8 +23,10 @@
     "babel-preset-stage-0": "^6.3.13",
     "babel-runtime": "^6.3.13",
     "brfs": "^2.0.2",
+    "browser-sync": "^2.26.7",
     "concurrently": "^3.6.1",
-    "github-pages": "^3.0.2",
+    "gh-pages": "^6.1.0",
+    "gulp": "^4.0.2",
     "json-loader": "^0.5.4",
     "pixi-animationloop": "^1.0.7",
     "pixi.js": "^5.1.2",
