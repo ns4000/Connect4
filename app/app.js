@@ -1,6 +1,6 @@
 const PIXI   = require('pixi.js');
-import defaults from "./Config.js";
-import Coin   from "./Coin.js";
+import defaults from "./config.js";
+import Coin   from "./coin.js";
 import Frame  from "./Frame.js";
 
 export  class Game{
@@ -8,7 +8,7 @@ export  class Game{
   constructor(domNode, optionObj){
     const config = optionObj || defaults;
 
-    this.app = new PIXI.Application(config.width,config.height,config.renderOption);
+    this.app = new PIXI.Application({ width: config.width, height: config.height, ...config.renderOption });
     domNode.appendChild(this.app.view);
 
     // a varilable to keep track which player is current,set to default player 1 = p1
@@ -17,10 +17,8 @@ export  class Game{
     this.winner ="";
     // gameIsRunning is a varilable to check if the game is running or already finished
     this.gameIsRunning = true ;
-    // instance of the Frame Sprite found in Frame.js
+    // instance of the Frame found in Frame.js
     this.frame = new Frame();
-    //scale the frame image to the size of the size of the canvas
-    this.frame.scale.set(0.71);
     // setting the frame interactive and adding an event for mouse cliking, and onClick call function is main trigger for the whole logic
     this.frame.interactive = true;
     // adding the frame to contanier
@@ -60,28 +58,86 @@ export  class Game{
     }
   }
 
-  // a simple alert function triggerd when the game is won by one of the players
-  alertWin(){
-    if(this.currentPlayer == 'p1')
-      {
-        this.winner = 'Blue';
-        alert("Blue Player has won");
-      }else{
-        this.winner ='Orange'
-        alert("Orange Player has won");
-      }
-    this.gameIsRunning = false;
-   };
+  // Show custom modal popup
+  showModal(title, message, showPlayAgain = false) {
+    // Remove any existing modal
+    const existingModal = document.querySelector('.modal-overlay');
+    if (existingModal) existingModal.remove();
 
-  // checking wheather a cell of the array is empty,if so add a coin with a refrence to which player
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay';
+
+    const popup = document.createElement('div');
+    popup.className = 'modal-popup';
+
+    const titleEl = document.createElement('h2');
+    titleEl.textContent = title;
+
+    const messageEl = document.createElement('p');
+    messageEl.textContent = message;
+
+    popup.appendChild(titleEl);
+    popup.appendChild(messageEl);
+
+    if (showPlayAgain) {
+      const playAgainBtn = document.createElement('button');
+      playAgainBtn.className = 'btn-primary';
+      playAgainBtn.textContent = 'Play Again';
+      playAgainBtn.onclick = () => {
+        overlay.remove();
+        this.resetGame();
+      };
+
+      const closeBtn = document.createElement('button');
+      closeBtn.className = 'btn-secondary';
+      closeBtn.textContent = 'Close';
+      closeBtn.onclick = () => overlay.remove();
+
+      popup.appendChild(playAgainBtn);
+      popup.appendChild(closeBtn);
+    } else {
+      const okBtn = document.createElement('button');
+      okBtn.className = 'btn-primary';
+      okBtn.textContent = 'OK';
+      okBtn.onclick = () => overlay.remove();
+      popup.appendChild(okBtn);
+    }
+
+    overlay.appendChild(popup);
+    document.body.appendChild(overlay);
+  }
+
+  // Reset game to initial state
+  resetGame() {
+    this.app.stage.removeChildren(1);
+    this.gameIsRunning = true;
+    this.frame.removeAllListeners();
+    this.indexArr = [];
+    this.init(this.frame);
+  }
+
+  // Show win popup when game is won
+  alertWin(){
+    if(this.currentPlayer == 'p1') {
+      this.winner = 'Blue';
+      this.showModal('Game Over!', 'Blue Player has won!', true);
+    } else {
+      this.winner = 'Orange';
+      this.showModal('Game Over!', 'Orange Player has won!', true);
+    }
+    this.gameIsRunning = false;
+  };
+
+  // checking whether a cell of the array is empty, if so add a coin with a reference to which player
   checkIndex(col){
-    for(let i = 0; i<= 6;i++) {
+    for(let i = 0; i < 6; i++) {  // Fixed: was i <= 6, but only 6 rows (0-5)
       if(this.indexArr[i][col].Player == null){
         this.indexArr[i][col].Player = this.currentPlayer;
-        this.winCheck(i,col);
-        return i;// this return value is to determin which row the coin should go to
+        this.winCheck(i, col);
+        return i; // this return value determines which row the coin should go to
       }
     }
+    return undefined; // Column is full
   };
 
   // function get adjacent and cellVal and winCheck was inspaierd by coder on the road https://codepen.io/coderontheroad/pen/GdxEo and twiked/fixed to work with my code
@@ -135,56 +191,33 @@ export  class Game{
 
   // click handler on the frame Sprite
   onClick(e){
-    // gameIsRunning
+    // Board dimensions
+    const padding = 10;
+    const cellSize = 73;
+    const cols = 7;
+    const rows = 6;
+
     if(this.gameIsRunning == true){
-
-      // creat an instance of sprite depending on which player is on right now
-      let newCoin = new Coin(this.spriteColor());
-
-      // check which colume the click event happend with, if x is smaller than 80px then its the first column and so on
       let xx = e.data.global.x;
 
-      if(xx<80){
-          newCoin.x = 8;
-          newCoin.y = 364-(this.checkIndex(0)*71); // after checking the index assign y value accordenling
-           this.switchPlayer(); // after creating and assiging the sprite switch the current player
-        }else if(xx<150){
-          newCoin.x = 79;
-          newCoin.y = 364-(this.checkIndex(1)*71);
-          this.switchPlayer();
-        }else if(xx<220){
-          newCoin.x = 151;
-          newCoin.y = 364-(this.checkIndex(2)*71);
-          this.switchPlayer();
-        }else if(xx<290){
-          newCoin.x = 221;
-          newCoin.y = 364-(this.checkIndex(3)*71);
-          this.switchPlayer();
-        }else if(xx<370){
-          newCoin.x = 293;
-          newCoin.y = 364-(this.checkIndex(4)*71);
-          this.switchPlayer();
-        }else if(xx<430){
-          newCoin.x = 363;
-          newCoin.y = 364-(this.checkIndex(5)*71);
-          this.switchPlayer();
-        }else if(xx<550){
-          newCoin.x = 434;
-          newCoin.y = 364-(this.checkIndex(6)*71);
-          this.switchPlayer();
-        }
-         // add the instance of the sprite
-         this.app.stage.addChild(newCoin);
-    }else{ // if the game is already finished alert the player of it and check if he wants to start a new game
-      let message = confirm('The game have finshed '+ this.winner +' has won, Start a new game?');
-      if(message == true){
-        //resting all required variable and listeners to make the game restart
-        this.app.stage.removeChildren(1);
-        this.gameIsRunning = true;
-        this.frame.removeAllListeners();
-        this.indexArr = [];
-        this.init(this.frame);
-      }
+      // Determine which column was clicked
+      let col = Math.floor((xx - padding) / cellSize);
+      if (col < 0) col = 0;
+      if (col >= cols) col = cols - 1;
+
+      // Check if column has space
+      let rowIndex = this.checkIndex(col);
+      if (rowIndex === undefined) return; // Column is full
+
+      // Create coin and position it
+      let newCoin = new Coin(this.spriteColor());
+      newCoin.x = padding + col * cellSize + cellSize / 2;
+      newCoin.y = padding + (rows - 1 - rowIndex) * cellSize + cellSize / 2;
+
+      this.app.stage.addChild(newCoin);
+      this.switchPlayer();
+    } else {
+      this.showModal('Game Finished', this.winner + ' has won! Play again?', true);
     }
   };
 }

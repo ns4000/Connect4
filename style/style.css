@@ -1,12 +1,86 @@
 body{
-  height: 90vh;
+  height: 100vh;
+  margin: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: white;
+  background: linear-gradient(to bottom, #2e8b57, #ff8c00);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 #display canvas{
   border-radius: 10px;
   box-shadow: rgba(0, 0, 0, 1) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px
+}
+
+/* Modal Popup Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-popup {
+  background: linear-gradient(135deg, #ffffff, #f0f0f0);
+  padding: 30px 40px;
+  border-radius: 15px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  max-width: 400px;
+  animation: slideIn 0.3s ease;
+}
+
+.modal-popup h2 {
+  margin: 0 0 10px 0;
+  color: #333;
+  font-size: 28px;
+}
+
+.modal-popup p {
+  margin: 0 0 25px 0;
+  color: #666;
+  font-size: 18px;
+}
+
+.modal-popup button {
+  padding: 12px 30px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin: 0 8px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.modal-popup button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #2e8b57, #3cb371);
+  color: white;
+}
+
+.btn-secondary {
+  background: linear-gradient(135deg, #888, #666);
+  color: white;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }

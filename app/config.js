@@ -1,7 +1,10 @@
 export default{
-  width:512,
-  height:440,
+  width: 531,
+  height: 478,
   renderOption:{
-    backgroundColor:0Xf9f9f9 
+    transparent: true,
+    antialias: true,
+    resolution: window.devicePixelRatio || 1,
+    autoDensity: true
   }
 };
